@@ -37,4 +37,5 @@ with gr.Blocks() as demo:
         with gr.Column(scale=1):
             button = gr.Button("Generate")
     button.click(predict, [txt, state], [state] + text_boxes)
-demo.queue().launch(share=True, inbrowser=True)
+# demo.queue().launch(share=True, inbrowser=True)
+demo.queue().launch(share=True, inbrowser=True, host="0.0.0.0")
