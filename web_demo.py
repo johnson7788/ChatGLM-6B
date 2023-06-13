@@ -41,11 +41,5 @@ with gr.Blocks() as demo:
             top_p = gr.Slider(0, 1, value=0.7, step=0.01, label="Top P", interactive=True)
             temperature = gr.Slider(0, 1, value=0.95, step=0.01, label="Temperature", interactive=True)
             button = gr.Button("Generate")
-<<<<<<< HEAD
-    button.click(predict, [txt, state], [state] + text_boxes)
-# demo.queue().launch(share=True, inbrowser=True)
-demo.queue().launch(share=True, inbrowser=True, server_name="0.0.0.0",server_port=8080)
-=======
     button.click(predict, [txt, max_length, top_p, temperature, state], [state] + text_boxes)
-demo.queue().launch(share=False, inbrowser=True)
->>>>>>> upstream/main
+demo.queue().launch(share=True, inbrowser=True, server_name="0.0.0.0")

@@ -8,8 +8,10 @@ import logging
 import os
 from flask import Flask, request, jsonify, abort
 from transformers import AutoModel, AutoTokenizer
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, supports_credentials=True)
 # 日志保存的路径，保存到当前目录下的logs文件夹中
 log_path = os.path.join(os.path.dirname(__file__), "logs")
 if not os.path.exists(log_path):
@@ -37,13 +39,25 @@ def chat():
     """
     jsonres = request.get_json()
     # 可以预测多条数据
-    input = jsonres.get('text')
-    if not input:
-        return jsonify({"response": "请输入文本"})
-    response, history = model.chat(tokenizer, input, history=[])
+    data = jsonres.get('data', None)
+    if not data:
+        return jsonify({"code": 400, "msg": "data不能为空"}), 400
+    logging.info(f"数据分别是: {data}")
+    input = data.get('text', '')
+    history = data.get('history', [])
+    response, history = model.chat(tokenizer, input, history=history)
     result = {"response": response}
+    logging.info(f"返回的结果是: {result}")
     return jsonify(result)
 
+@app.route("/ping", methods=['GET', 'POST'])
+def ping():
+    """
+    测试
+    :return:
+    :rtype:
+    """
+    return jsonify("Pong")
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=4636, debug=False, threaded=True)
-    print(input)
+    app.run(host='0.0.0.0', port=7087, debug=False, threaded=True)
